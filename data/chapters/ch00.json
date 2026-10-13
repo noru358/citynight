@@ -1,0 +1,19 @@
+{
+  "id": "ch00",
+  "title": "자리표시 장 — 밤 옥상",
+  "note": "이야기 미정. 캡션은 전부 자리표시다. 장면 구조(비트·음악·엔딩)가 돌아가는지 보는 용도.",
+  "map": "ch00_rooftops.txt",
+  "sky": {"top": "0d1026", "bottom": "3a2c55", "glow": "c86a6a", "far": "1b1d38", "near": "12142a"},
+  "music": {"track": "ch00", "stems_on": ["base"]},
+  "beats": {
+    "1": {"caption": "[비트 1 자리] 이 장의 사건이 처음 눈에 들어오는 곳", "stems_on": ["drums"]},
+    "2": {"caption": "[비트 2 자리] 사건의 사람과 처음 엇갈리는 곳", "stems_on": ["lead"]},
+    "3": {"caption": "[비트 3 자리] 마지막 옥상이 보인다", "stems_off": ["drums"]}
+  },
+  "ending": {
+    "caption": "[엔딩 자리] 옥상 끝에 앉는다. 여기서 엔딩 몽타주가 시작된다.",
+    "zoom_out": 0.6,
+    "hold_seconds": 7,
+    "music_fade_seconds": 5
+  }
+}
