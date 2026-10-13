@@ -157,7 +157,7 @@ func _build_map() -> void:
 					light.tuning = tuning
 					light.position = center
 					geometry.add_child(light)
-				"^": hazards.append(Rect2(Vector2(col,row)*tile+Vector2(4,tile*0.4),Vector2(tile-8,tile*0.6)))
+				"^": hazards.append(Rect2(Vector2(col,row)*tile+Vector2(tile/8,tile*0.4),Vector2(tile*0.75,tile*0.6)))
 				"P": spawn = center+Vector2(0,tile/2-float(tuning.player_height)/2)
 				"E": ending_spot = center
 				_:
@@ -264,7 +264,7 @@ func _process(delta: float) -> void:
 		camera.zoom = Vector2.ONE*zoom_value
 	camera.position_smoothing_speed = float(tuning.camera_smoothing)
 	var half: Vector2 = viewport/camera.zoom.x/2
-	lead = lerpf(lead,110.0*hero.facing,clampf(2.5*delta,0,1))
+	lead = lerpf(lead,tile*3.4*hero.facing,clampf(2.5*delta,0,1))
 	var target: Vector2 = hero.global_position+Vector2(lead,-tile)
 	camera.global_position = Vector2(clampf(target.x,half.x,maxf(half.x,map_size.x-half.x)),clampf(target.y,half.y,maxf(half.y,map_size.y-half.y)))
 	sky.queue_redraw()

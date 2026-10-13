@@ -12,7 +12,7 @@ enum State { GROUND, AIR, DASH, BASH }
 var tuning: Dictionary = {}
 var state: State = State.AIR
 var facing: int = 1
-var body_size: Vector2 = Vector2(30,46)
+var body_size: Vector2 = Vector2(20,32)
 var frozen: bool = false
 
 var dash_uses: int = 0
@@ -49,7 +49,7 @@ func _ready() -> void:
 	collision.shape = RectangleShape2D.new()
 	add_child(collision)
 	set_body_size(body_size)
-	floor_snap_length = 4
+	floor_snap_length = 3
 
 func t(key: String) -> float:
 	return float(tuning[key])
@@ -169,10 +169,14 @@ func _physics_process(delta: float) -> void:
 	elif state == State.BASH:
 		state = State.AIR
 		Engine.time_scale = 1
-	# A dash that ran its full distance keeps only part of its speed.
+	# A dash that ran its full distance keeps only part of its speed. Rising speed
+	# keeps less: at 0.65 an up dash kept lifting the hero ~1.7 tiles afterwards,
+	# a second small jump after the dash ("frog hop").
 	if dash_ended:
 		dash_ended = false
-		if state != State.DASH: velocity *= t("dash_end_keep")
+		if state != State.DASH:
+			velocity.x *= t("dash_end_keep")
+			velocity.y *= t("dash_end_up_keep") if velocity.y < 0 else t("dash_end_keep")
 	lock_time = maxf(0,lock_time-delta)
 	dash_cooldown = maxf(0,dash_cooldown-delta)
 	var axis: float = signf(Controls.dir().x)

@@ -30,5 +30,5 @@ for name in a.tests:
     ok &= passed
     print(name, 'PASS' if passed else 'FAIL')
     for line in text.splitlines():
-        if line.startswith(('RESULT', 'ROUTE', 'FAIL', 'ok:', 'SCRIPT ERROR')): print('  ' + line)
+        if line.startswith(('RESULT', 'ROUTE', 'ARC', 'FAIL', 'ok:', 'SCRIPT ERROR')): print('  ' + line)
 sys.exit(0 if ok else 1)
