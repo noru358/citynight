@@ -28,6 +28,14 @@
 - 기록: `user://citynight_log.jsonl` (장, 걸린 시간, 떨어짐, 튕기기, 비트 도달, 완주).
 - 검사 `python3 tests/run_tests.py --godot <Godot 경로>`: DataSuite(잘못된 장·맵 거부 4건), RouteProbe(단순 봇이 무적 없이 엔딩까지, 떨어짐 0, 튕기기 3). 캡처는 `tests/CaptureProbe.tscn`(디스플레이 필요), 결과 예시 `docs/preview.png`.
 
+## 팀
+
+`docs/TEAMS.md` 참조. 스토리(사용자) / 연출·레벨(Claude) / 아트(도트+시티팝) / 음악(보류) / 개발 기획(Claude+Codex).
+
+## 실행 환경
+
+- 주 작업 맥북, 직장에서는 윈도우. 윈도우에선 Godot 설치 없이 도는 묶음(엔진 exe + 게임 폴더 + Play.cmd)으로 시험한다. 묶음은 저장소에 넣지 않는다(76MB).
+
 ## 다음 할 일
 
 1. 사용자: `Run.command`로 한 번 돌려보고 이동이 tt 점프 장난감과 같은 느낌인지만 확인(다르면 어디가 다른지).
