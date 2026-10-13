@@ -25,6 +25,7 @@
 - 배경 `world/NightSky.gd`, `world/Facade.gd`: 그라데이션 하늘·달·별·두 겹 시차 스카이라인·불 켜진 창. 회색 상자보다 한 단계 위의 임시 그림.
 - 장 데이터 `data/chapters/ch00.json` + `maps/ch00_rooftops.txt`: 자리표시 장 하나(옥상 170칸, 비트 3개, 엔딩 자리). 비트는 캡션을 띄우고 음악 줄기(stem)를 켜고 끈다. 엔딩 자리에 서면 조작이 멈추고 카메라가 빠지고 음악이 잦아들고 "엔딩 몽타주 자리"로 끝난다.
 - 음악 `autoload/MusicDirector.gd`: `audio/<트랙>/` 폴더의 줄기 파일들(base.ogg, drums.ogg, lead.ogg 등)을 동시에 틀고 비트에서 켜고 끈다. 지금은 곡이 없어서 조용히 넘어간다(`MUSIC_MISSING` 출력).
+- 아트 기준(2026-10-13 확정): 640×360, 타일 20px, 주인공 34px, 팔레트 초안. `docs/art/README.md`. 게임 코드에는 아직 반영 안 됨(지금 수치는 32px 타일 기준).
 - 기록: `user://citynight_log.jsonl` (장, 걸린 시간, 떨어짐, 튕기기, 비트 도달, 완주).
 - 검사 `python3 tests/run_tests.py --godot <Godot 경로>`: DataSuite(잘못된 장·맵 거부 4건), RouteProbe(단순 봇이 무적 없이 엔딩까지, 떨어짐 0, 튕기기 3). 캡처는 `tests/CaptureProbe.tscn`(디스플레이 필요), 결과 예시 `docs/preview.png`.
 
@@ -38,7 +39,8 @@
 
 ## 다음 할 일
 
-0. (2026-10-13 밤) 작업을 새 claude.ai 프로젝트로 옮긴다. 시작 문서: `docs/CLAUDE_PROJECT.md`. 첫 안건은 아트 기준(해상도·주인공 키·팔레트) 짧게 확정 → 스토리(사건 종류).
+0. (2026-10-13) 새 claude.ai 프로젝트로 옮김. 아트 기준 확정 끝. 다음은 스토리(사건 종류).
+0-1. Claude/Codex: 아트 기준 반영. 뷰포트 640×360 + 정수 배율, `tile_size` 20, 거리·속도·가속 수치 전부 ×0.625(20/32, 맵 칸 기준 점프 높이 유지), 히트박스 약 20×32, `camera_view_*` 정리. 주인공 그림 34px이 히트박스보다 커서 점프가 몸 대비 약간 낮아 보일 수 있음 → 사용자 손맛 확인.
 
 1. 사용자: `Run.command`로 한 번 돌려보고 이동이 tt 점프 장난감과 같은 느낌인지만 확인(다르면 어디가 다른지).
 2. 사용자 + Claude: 이야기 — 주인공이 지나가는 "사건"의 종류부터. `docs/DIRECTION.md` 열린 질문 순서대로.
