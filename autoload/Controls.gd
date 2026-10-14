@@ -1,5 +1,6 @@
 # Input in one place. Keyboard: WASD/arrows move and aim, Space jump, Shift dash,
-# K bash (hold to aim, release to launch). Pad: left stick, A jump, B dash, Y bash.
+# K bash (hold to aim, release to launch), J or left click slash, L or right click shoot.
+# Pad: left stick, A jump, B dash, Y bash, X slash, RB shoot.
 # Tests switch `scripted` on and write `held`/`edges` each physics frame instead.
 extends Node
 const ACTIONS: Dictionary = {
@@ -10,7 +11,10 @@ const ACTIONS: Dictionary = {
 	&"jump": [KEY_SPACE, JOY_BUTTON_A],
 	&"dash": [KEY_SHIFT, JOY_BUTTON_B],
 	&"bash": [KEY_K, JOY_BUTTON_Y],
+	&"slash": [KEY_J, JOY_BUTTON_X],
+	&"shoot": [KEY_L, JOY_BUTTON_RIGHT_SHOULDER],
 }
+const MOUSE: Dictionary = {&"slash": MOUSE_BUTTON_LEFT, &"shoot": MOUSE_BUTTON_RIGHT}
 const DEADZONE: float = 0.3
 var scripted: bool = false
 var held: Dictionary = {}
@@ -32,6 +36,10 @@ func _ready() -> void:
 				var button: InputEventJoypadButton = InputEventJoypadButton.new()
 				button.button_index = code
 				InputMap.action_add_event(action,button)
+		if MOUSE.has(action):
+			var click: InputEventMouseButton = InputEventMouseButton.new()
+			click.button_index = MOUSE[action]
+			InputMap.action_add_event(action,click)
 	for pair: Array in [[&"left",JOY_AXIS_LEFT_X,-1.0],[&"right",JOY_AXIS_LEFT_X,1.0],[&"up",JOY_AXIS_LEFT_Y,-1.0],[&"down",JOY_AXIS_LEFT_Y,1.0]]:
 		var motion: InputEventJoypadMotion = InputEventJoypadMotion.new()
 		motion.axis = pair[1]

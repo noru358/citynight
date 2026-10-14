@@ -303,7 +303,7 @@ func _build_ui() -> void:
 	buttons.position = Vector2(16,12)
 	buttons.modulate.a = 0.6
 	layer.add_child(buttons)
-	for title: String in ["튜닝 Tab","처음부터","맵 바꾸기","종료"]:
+	for title: String in ["튜닝 Tab","처음부터","맵 바꾸기","전투 시험","종료"]:
 		var button: Button = Button.new()
 		button.text = title
 		button.focus_mode = Control.FOCUS_NONE
@@ -352,6 +352,12 @@ func _command(title: String) -> void:
 			var at: int = files.find(chapter_path.get_file())
 			picked_chapter = "res://data/chapters/"+str(files[(at+1)%files.size()])
 			restart()
+		"전투 시험":
+			write_log()
+			Controls.blocked = false
+			Engine.time_scale = 1
+			MusicDirector.stop()
+			get_tree().change_scene_to_file("res://arena/arena.tscn")
 		"종료":
 			write_log()
 			get_tree().quit()
