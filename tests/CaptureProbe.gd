@@ -6,7 +6,7 @@ func _ready() -> void:
 	add_child(stage)
 	var directory: String = OS.get_environment("CITYNIGHT_CAPTURE_DIR")
 	for spot: Vector2i in [Vector2i(4,13),Vector2i(32,12),Vector2i(64,11),Vector2i(76,9),Vector2i(90,11),Vector2i(140,13),Vector2i(158,10)]:
-		stage.hero.global_position = (Vector2(spot)+Vector2(0.5,0.5))*32
+		stage.hero.global_position = (Vector2(spot)+Vector2(0.5,0.5))*stage.tile
 		stage.hero.reset_motion()
 		stage.camera.global_position = stage.hero.global_position
 		stage.camera.reset_smoothing()

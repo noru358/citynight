@@ -8,6 +8,7 @@ const CHAPTER_DEFAULT: String = "res://data/chapters/ch00.json"
 const TUNING_DEFAULT: String = "res://data/movement_tuning.json"
 const SCHEMA_PATH: String = "res://data/movement_schema.json"
 var chapter_path: String = CHAPTER_DEFAULT
+static var picked_chapter: String = "" # survives "처음부터"; set by the 맵 바꾸기 button
 var tuning_path: String = TUNING_DEFAULT
 var chapter: Dictionary
 var tuning: Dictionary
@@ -43,6 +44,7 @@ var end_label: Label
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	if not picked_chapter.is_empty(): chapter_path = picked_chapter
 	if not OS.get_environment("CITYNIGHT_CHAPTER").is_empty(): chapter_path = OS.get_environment("CITYNIGHT_CHAPTER")
 	if not OS.get_environment("CITYNIGHT_TUNING").is_empty(): tuning_path = OS.get_environment("CITYNIGHT_TUNING")
 	_build_ui()
@@ -157,7 +159,7 @@ func _build_map() -> void:
 					light.tuning = tuning
 					light.position = center
 					geometry.add_child(light)
-				"^": hazards.append(Rect2(Vector2(col,row)*tile+Vector2(4,tile*0.4),Vector2(tile-8,tile*0.6)))
+				"^": hazards.append(Rect2(Vector2(col,row)*tile+Vector2(tile/8,tile*0.4),Vector2(tile*0.75,tile*0.6)))
 				"P": spawn = center+Vector2(0,tile/2-float(tuning.player_height)/2)
 				"E": ending_spot = center
 				_:
@@ -264,7 +266,7 @@ func _process(delta: float) -> void:
 		camera.zoom = Vector2.ONE*zoom_value
 	camera.position_smoothing_speed = float(tuning.camera_smoothing)
 	var half: Vector2 = viewport/camera.zoom.x/2
-	lead = lerpf(lead,110.0*hero.facing,clampf(2.5*delta,0,1))
+	lead = lerpf(lead,tile*3.4*hero.facing,clampf(2.5*delta,0,1))
 	var target: Vector2 = hero.global_position+Vector2(lead,-tile)
 	camera.global_position = Vector2(clampf(target.x,half.x,maxf(half.x,map_size.x-half.x)),clampf(target.y,half.y,maxf(half.y,map_size.y-half.y)))
 	sky.queue_redraw()
@@ -301,7 +303,7 @@ func _build_ui() -> void:
 	buttons.position = Vector2(16,12)
 	buttons.modulate.a = 0.6
 	layer.add_child(buttons)
-	for title: String in ["튜닝 Tab","처음부터","종료"]:
+	for title: String in ["튜닝 Tab","처음부터","맵 바꾸기","종료"]:
 		var button: Button = Button.new()
 		button.text = title
 		button.focus_mode = Control.FOCUS_NONE
@@ -343,6 +345,13 @@ func _command(title: String) -> void:
 			Controls.blocked = panel.visible
 			get_tree().paused = false
 		"처음부터": restart()
+		"맵 바꾸기":
+			var files: Array = Array(DirAccess.get_files_at("res://data/chapters")).filter(func(f: String) -> bool: return f.ends_with(".json"))
+			if files.is_empty(): return
+			files.sort()
+			var at: int = files.find(chapter_path.get_file())
+			picked_chapter = "res://data/chapters/"+str(files[(at+1)%files.size()])
+			restart()
 		"종료":
 			write_log()
 			get_tree().quit()

@@ -16,9 +16,9 @@ func _draw() -> void:
 				var shade: float = 0.06*NightSkyHash.h(col/6,7)
 				draw_rect(rect.grow(0.5),Color(0.10+shade,0.10+shade,0.17+shade))
 				if not stage.solid_at(col,row-1):
-					draw_rect(Rect2(rect.position,Vector2(tile,4)),Color("6f6a9a"))
+					draw_rect(Rect2(rect.position,Vector2(tile,tile/8)),Color("6f6a9a"))
 				elif NightSkyHash.h(col,row) > 0.78:
 					var warm: bool = NightSkyHash.h(col+3,row) > 0.35
-					draw_rect(Rect2(rect.position+Vector2(9,8),Vector2(14,16)),Color("f2c27a") if warm else Color("8fb8e8"),true)
+					draw_rect(Rect2(rect.position+Vector2(0.28,0.25)*tile,Vector2(0.44,0.5)*tile),Color("f2c27a") if warm else Color("8fb8e8"),true)
 			elif c == "=":
 				draw_rect(Rect2(rect.position,Vector2(tile,thickness)),Color("b9a7d6"))

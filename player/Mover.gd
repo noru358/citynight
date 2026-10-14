@@ -12,7 +12,7 @@ enum State { GROUND, AIR, DASH, BASH }
 var tuning: Dictionary = {}
 var state: State = State.AIR
 var facing: int = 1
-var body_size: Vector2 = Vector2(30,46)
+var body_size: Vector2 = Vector2(20,32)
 var frozen: bool = false
 
 var dash_uses: int = 0
@@ -30,6 +30,7 @@ var jump_pending: float = 0
 var wall_grace: float = 0
 var wall_normal: Vector2 = Vector2.ZERO
 var lock_time: float = 0
+var jump_rising: bool = false # a ground jump still rising; releasing jump cuts it short
 
 var target: Node2D
 var aim: Vector2 = Vector2.UP
@@ -49,7 +50,7 @@ func _ready() -> void:
 	collision.shape = RectangleShape2D.new()
 	add_child(collision)
 	set_body_size(body_size)
-	floor_snap_length = 4
+	floor_snap_length = 3
 
 func t(key: String) -> float:
 	return float(tuning[key])
@@ -73,6 +74,7 @@ func reset_motion() -> void:
 	dash_pending = 0
 	jump_pending = 0
 	lock_time = 0
+	jump_rising = false
 	wall_grace = 0
 	launch_age = -1
 	coast_remaining = 0
@@ -118,6 +120,7 @@ func _launch() -> void:
 
 func _begin_dash(direction: Vector2) -> void:
 	state = State.DASH
+	jump_rising = false
 	dash_elapsed = 0
 	dash_time = maxf(t("dash_duration"),1.0/Engine.physics_ticks_per_second)
 	dash_speed = t("dash_distance")/dash_time
@@ -169,10 +172,14 @@ func _physics_process(delta: float) -> void:
 	elif state == State.BASH:
 		state = State.AIR
 		Engine.time_scale = 1
-	# A dash that ran its full distance keeps only part of its speed.
+	# A dash that ran its full distance keeps only part of its speed. Rising speed
+	# keeps less: at 0.65 an up dash kept lifting the hero ~1.7 tiles afterwards,
+	# a second small jump after the dash ("frog hop").
 	if dash_ended:
 		dash_ended = false
-		if state != State.DASH: velocity *= t("dash_end_keep")
+		if state != State.DASH:
+			velocity.x *= t("dash_end_keep")
+			velocity.y *= t("dash_end_up_keep") if velocity.y < 0 else t("dash_end_keep")
 	lock_time = maxf(0,lock_time-delta)
 	dash_cooldown = maxf(0,dash_cooldown-delta)
 	var axis: float = signf(Controls.dir().x)
@@ -200,11 +207,18 @@ func _physics_process(delta: float) -> void:
 		elif is_on_floor():
 			jump_pending = 0
 			velocity.y = -t("jump_velocity")
+			jump_rising = true
 			state = State.AIR
 			launch_age = -1
 			coast_remaining = 0
 			dash_pending = 0
 			jumped.emit()
+	# Variable jump: letting go while a ground jump still rises keeps only part of the
+	# rise, so a tap clears a low step and a held press reaches the full height.
+	if jump_rising and (velocity.y >= 0 or state == State.DASH or lock_time > 0 or launch_age >= 0): jump_rising = false
+	if jump_rising and not Controls.is_held(&"jump"):
+		velocity.y *= t("jump_release_keep")
+		jump_rising = false
 	# Each dash press owns its direction and may cut the first dash short.
 	dash_pending = maxf(0,dash_pending-delta)
 	if Controls.just(&"dash") and dash_uses < int(t("air_dash_count")):
