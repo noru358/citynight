@@ -5,7 +5,7 @@ import argparse, os, pathlib, subprocess, sys, tempfile
 p = argparse.ArgumentParser(description=__doc__)
 p.add_argument('--godot', default='godot')
 p.add_argument('--output', default=None)
-p.add_argument('--tests', nargs='+', default=['DataSuite', 'RouteProbe'])
+p.add_argument('--tests', nargs='+', default=['DataSuite', 'RouteProbe', 'PracticeProbe'])
 a = p.parse_args()
 project = pathlib.Path(__file__).resolve().parents[1]
 out = pathlib.Path(a.output or tempfile.mkdtemp(prefix='citynight-tests-')).resolve()
@@ -30,5 +30,5 @@ for name in a.tests:
     ok &= passed
     print(name, 'PASS' if passed else 'FAIL')
     for line in text.splitlines():
-        if line.startswith(('RESULT', 'ROUTE', 'ARC', 'FAIL', 'ok:', 'SCRIPT ERROR')): print('  ' + line)
+        if line.startswith(('RESULT', 'ROUTE', 'ARC', 'GAP', 'FAIL', 'ok:', 'SCRIPT ERROR')): print('  ' + line)
 sys.exit(0 if ok else 1)
