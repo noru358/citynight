@@ -16,6 +16,7 @@
   "player_height": 32,
   "move_speed": 143.75,
   "jump_velocity": 281.25,
+  "jump_release_keep": 0.5,
   "gravity": 750,
   "max_fall_speed": 453.125,
   "air_control_accel": 843.75,
@@ -30,9 +31,9 @@
   "camera_view_height": 360,
   "slow_speed": 0.5,
   "dash_distance": 81.25,
-  "dash_duration": 0.18,
+  "dash_duration": 0.24,
   "dash_cooldown": 0.45,
-  "air_dash_count": 2,
+  "air_dash_count": 1,
   "bash_flash_time": 0.22,
   "bash_trail_length": 62.5,
   "bash_burst_radius": 22.5,
@@ -44,7 +45,7 @@
   "wall_jump_grace": 0.1,
   "dash_input_buffer": 0.22,
   "dash_aim_grace": 0.06,
-  "dash_end_keep": 0.65,
+  "dash_end_keep": 0.4,
   "dash_end_up_keep": 0.3,
   "platform_thickness": 4
 }

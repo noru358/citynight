@@ -1,9 +1,9 @@
 # Measures the arc after air dashes, in tiles, on flat ground with no map.
-# Scenario: jump, then two air dashes in a direction. Prints apex height, how far
+# Scenarios: a tapped jump, a held jump, then a held jump with two air dashes in a direction. Prints apex height, how far
 # the hero keeps rising after the last dash ends, and the time to that apex.
 # Numbers, not feel: use it to compare tunings, then judge by hand.
 extends Node
-const SCENARIOS: Array = [["jump only",[]],["up x2",[&"up"]],["up-right x2",[&"up",&"right"]],["right x2",[&"right"]]]
+const SCENARIOS: Array = [["tap jump",[&"tap"]],["jump only",[]],["up, dash pressed twice",[&"up"]],["up-right, dash pressed twice",[&"up",&"right"]],["right, dash pressed twice",[&"right"]]]
 var tuning: Dictionary
 var tile: float
 
@@ -42,8 +42,9 @@ func _run(title: String, aim: Array) -> void:
 		var held: Dictionary = {}
 		for key: StringName in aim: held[key] = true
 		Controls.held = held if dashes > 0 or frame >= 14 else {}
+		if not aim.has(&"tap") or frame < 2: Controls.held[&"jump"] = true
 		if frame == 0: Controls.edges[&"jump"] = true
-		if not aim.is_empty() and dashes < 2 and frame >= 15 and hero.state != Mover.State.DASH:
+		if not aim.is_empty() and not aim.has(&"tap") and dashes < 2 and frame >= 15 and hero.state != Mover.State.DASH:
 			Controls.edges[&"dash"] = true
 			dashes += 1
 		await get_tree().physics_frame

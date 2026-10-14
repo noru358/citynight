@@ -84,6 +84,11 @@
     "max": 1290,
     "step": 4.3
   },
+  "jump_release_keep": {
+    "min": 0,
+    "max": 1,
+    "step": 0.05
+  },
   "gravity": {
     "min": 105.0,
     "max": 3150,

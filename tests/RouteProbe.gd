@@ -49,3 +49,4 @@ func _physics_process(_delta: float) -> void:
 	elif is_instance_valid(target) and not hero.is_on_floor() and target.global_position.x > hero.global_position.x-8:
 		bash_hold = 4
 		Controls.held = {&"right":true,&"bash":true}
+	Controls.held[&"jump"] = true # always full-height jumps
